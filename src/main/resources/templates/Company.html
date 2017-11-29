@@ -28,10 +28,10 @@ xmlns:th="http://www.thymeleaf.org">
 					<li class="active">
 						<a href="/company" title="Ir para Cadastro de empresa">Empresa</a>
 					</li>
-					<li>
+					<li th:if="${not #lists.isEmpty(companies)}">
 						<a href="/payable/0" title="Ir para Cadastro de contas">Cadastro de contas</a>
 					</li>
-					<li>
+					<li th:if="${not #lists.isEmpty(companies)}">
 						<a href="/payable/hist" title="Ir para Historico de contas">Historico</a>
 					</li>
 				</ul>
