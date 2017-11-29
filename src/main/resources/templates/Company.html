@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width" />
+		<title>Empresa</title>     
+
+		
+		<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+		<link th:href="@{/webjars/bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet"/>
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-default">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/company">Contas</a>
+				</div>
+				
+				<ul class="nav navbar-nav">
+					<li class="active">
+						<a href="/company" title="Ir para Cadastro de empresa">Empresa</a>
+					</li>
+					<li>
+						<a href="/payable/0" title="Ir para Cadastro de contas">Cadastro de contas</a>
+					</li>
+					<li>
+						<a href="/payable/hist" title="Ir para Historico de contas">Historico</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+	
+		<div class="panel panel-default" style="margin: 10px">
+			<div class="panel-heading">
+				<h1 class="panel-title">Empresa</h1>
+			</div>			
+		
+			<div class="panel-body">		
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Matriz</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="company : ${companies}">
+							<td th:text="${company.name}"></td>
+							<td th:text="${company.IdParent}"></td>
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-sm btn-primary" th:href="@{/company/edit/{id}(id=${company.id})}" >Editar</a>
+                                    <a class="delete btn btn-sm btn-danger" th:href="@{/company/delete/{id}(id=${company.id})}">Excluir</a>
+                               </div>
+                            </td>							
+						</tr>
+					</tbody>
+				</table>		
+			</div>
+	        <div class="panel-footer">
+	            <a class="btn btn-sm btn-success" th:href="@{/company/add/}" >Adicionar</a>
+	        </div>			
+		</div>
+	</body>
+</html>

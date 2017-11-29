@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width" />
+		<title>Contas a Pagar</title>		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
+		<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+		<link th:href="@{/webjars/bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet"/>
+
+	</head>
+	<body>
+	
+		<header>
+			<nav class="navbar navbar-default">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/company">Contas</a>
+				</div>
+				
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="/company" title="Ir para Cadastro de empresa">Empresa</a>
+					</li>
+					<li class="active">
+						<a href="/payable/0" title="Ir para Cadastro de contas">Cadastro de contas</a>
+					</li>
+					<li>
+						<a href="/payable/hist" title="Ir para Historico de contas">Historico</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+	
+	
+		<div class="panel panel-default" style="margin: 10px">
+			<div class="panel-heading">
+				<h1 class="panel-title">Contas a Pagar</h1>
+			</div>			
+		
+			<div class="panel-body">	
+            	<div class="form-group row">
+            		<div class="col-md-1">                                                      
+		            	<label>Empresa: </label>
+						<select name= "company-select" id= "company-select">
+							<option value="0">Todas as empresas</option>
+				        	<option th:each="company : ${companies}"
+				            	    th:value="${company.id}"							                
+				                	th:text="${company.name}" />									
+						</select>
+					</div>
+		       	</div> 			
+				
+				<table id="table_payable" class="table">
+					<thead>
+						<tr>
+							<th>Empresa</th>
+							<th>Descrição</th>
+							<th>Valor</th>
+							<th>Data</th>
+							<th>Situação</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="payable : ${payables}">
+							<td th:text="${payable.company.name}"></td>						
+							<td th:text="${payable.description}"></td>
+							<td th:text="${payable.value != null} ? ${#numbers.formatDecimal(payable.value, 0, 'POINT', 2, 'COMMA')}"></td>
+							<td th:text="${payable.data != null} ? ${#dates.format(payable.data, 'dd/MM/yyyy')}"></td>
+							<td th:text="${payable.statusType}"></td>								
+                            <td>
+		                        <div class="btn-group pull-right">		                        
+                            		<a class="btn btn-sm btn-warning" th:href="@{/payable/edit/{id}(id=${payable.id})}" >Editar</a>
+		                            <a class="btn btn-sm btn-primary" th:href="@{/payable/pay/{id}(id=${payable.id})}" th:classappend="${payable.statusType.toString()} == 'Pago' ? 'hide' : 'show'">Pagar</a>
+                            		<a class="delete btn btn-sm btn-danger" th:href="@{/payable/delete/{id}(id=${payable.id})}">Excluir</a>		                            
+		                       </div>
+                            </td>							
+						</tr>						
+					</tbody>
+				</table>
+				
+				<div class="form-group row">
+	                <div class="col-md-1">
+	                	<label>Total Pago: </label>
+	                    <input type="text" class="form-control input-sm" id="sumPaid" th:value="${sumPaid != null} ? ${#numbers.formatDecimal(sumPaid, 0, 'POINT', 2, 'COMMA')}" readOnly="readonly"/>
+	                </div>            
+	                <div class="col-md-1">
+	                	<label>Saldo a Pagar: </label>
+	                    <input type="text" class="form-control input-sm" id="sumNotPay" th:value="${sumNotPay != null} ? ${#numbers.formatDecimal(sumNotPay, 0, 'POINT', 2, 'COMMA')}" readOnly="readonly"/>
+	                </div>
+	             </div>		
+			</div>
+            
+	        <div class="panel-footer">
+	            <a class="btn btn-sm btn-success" th:href="@{/payable/add/}" >Adicionar</a>
+	        </div>			
+		</div>		
+		
+		<script>
+			((d, w) => {
+				$('#company-select').on('change', ev => w.location.href = ev.target.value);				
+			})(document, window);
+		</script>
+		
+	</body>
+</html>

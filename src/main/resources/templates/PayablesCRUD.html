@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width" />
+		<title>Cadastro de Contas a Pagar</title>
+		
+		<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+		<link th:href="@{/webjars/bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet"/>
+</head>
+<body>
+
+	<header>
+		<nav class="navbar navbar-default">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/company">Contas</a>
+			</div>
+			
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="/company" title="Ir para Cadastro de empresa">Empresa</a>
+				</li>
+				<li>
+					<a href="/payable/0" title="Ir para Cadastro de contas">Cadastro de contas</a>
+				</li>
+				<li>
+					<a href="/payable/hist" title="Ir para Historico de contas">Historico</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+
+    <div class="panel panel-default" style="margin: 10px">
+        <div class="panel-heading">
+            <strong>Cadastro de Contas a Pagar</strong>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" th:object="${payable}" th:action="@{/payable/save}" method="POST" style="margin: 10px">
+                <div class="form-group">
+                    <fieldset>
+                        <div class="form-group row">
+                            <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+                                <div th:each="detailedError : ${#fields.detailedErrors()}">
+                                    <span th:text="${detailedError.message}"></span>
+                                </div>
+                            </div>
+                        </div>                    
+                        <div class="form-group row">                                                          
+                            <div class="col-md-4" th:classappend="${#fields.hasErrors('company')}? 'has-error'">
+                                <label>Empresa: </label>
+								<select name= "company-select" th:field="*{company}">
+									<option value="0">Selecione uma empresa...</option>
+							        <option th:each="company : ${companies}"
+							                th:value="${company.id}"							                
+							                th:text="${company.name}" />									
+								</select>                                                                
+                            </div>
+                        </div>                         
+                        <div class="form-group row">                                                          
+                            <div class="col-md-4" th:classappend="${#fields.hasErrors('description')}? 'has-error'">
+                                <label>Descrição: </label>
+                                <input type="text" class="form-control input-sm" th:field="*{description}" autofocus="autofocus" placeholder="Descrição" maxlength="50"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4" th:classappend="${#fields.hasErrors('value')}? 'has-error'">
+                                <label>Valor: </label> 
+                                <input type="number" class="form-control input-sm" th:field="*{value}" min="0.01" step="0.01" placeholder="Valor"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2" th:classappend="${#fields.hasErrors('data')}? 'has-error'">
+                                <label>Data</label> 
+                                <input type="date" class="form-control input-sm" th:field="*{data}"/>
+                            </div>
+                        </div>                                                
+                    </fieldset>
+                </div>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-sm btn-primary">Salvar</button>
+                    <a th:href="@{/payable/0}" class="btn btn-sm btn-default">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

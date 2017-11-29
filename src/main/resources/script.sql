@@ -1,0 +1,1 @@
+CREATE SCHEMA `gestao-conta` ;
